@@ -704,19 +704,35 @@
     .calendar-day.special {
       color: #f5edd6;
       border-color: rgba(196, 92, 92, 0.5);
-      animation: calendarGlow 2s ease-in-out infinite;
+      animation: calendarGlow 3s linear infinite;
     }
     .calendar-day.special:hover {
-      background: rgba(196, 92, 92, 0.25);
+      background: rgba(255, 255, 255, 0.1);
     }
     @keyframes calendarGlow {
       0%, 100% {
-        box-shadow: 0 0 6px rgba(196, 92, 92, 0.3);
-        border-color: rgba(196, 92, 92, 0.4);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.2);
+        border-color: rgba(255, 0, 0, 0.6);
+      }
+      16% {
+        box-shadow: 0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.2);
+        border-color: rgba(255, 165, 0, 0.6);
+      }
+      33% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5), 0 0 20px rgba(255, 255, 0, 0.2);
+        border-color: rgba(255, 255, 0, 0.6);
       }
       50% {
-        box-shadow: 0 0 16px rgba(196, 92, 92, 0.7), 0 0 30px rgba(196, 92, 92, 0.3);
-        border-color: rgba(196, 92, 92, 0.8);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.2);
+        border-color: rgba(0, 255, 0, 0.6);
+      }
+      66% {
+        box-shadow: 0 0 10px rgba(0, 100, 255, 0.5), 0 0 20px rgba(0, 100, 255, 0.2);
+        border-color: rgba(0, 100, 255, 0.6);
+      }
+      83% {
+        box-shadow: 0 0 10px rgba(180, 0, 255, 0.5), 0 0 20px rgba(180, 0, 255, 0.2);
+        border-color: rgba(180, 0, 255, 0.6);
       }
     }
     .calendar-day.selected {
@@ -727,9 +743,10 @@
       animation: none;
     }
     .calendar-day.special.selected {
-      background: rgba(196, 92, 92, 0.35);
-      border-color: #c45c5c;
-      box-shadow: 0 0 12px rgba(196, 92, 92, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #f5edd6;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
+      animation: none;
     }
     #calendar-response {
       font-family: 'Lora', serif;
@@ -908,9 +925,9 @@
   <!-- ===== FINAL SCREEN (proposal) ===== -->
   <div id="final-screen" class="screen">
     <div class="final-message" id="final-message"></div>
-    <p class="signature" id="final-signature">— Nicolás</p>
-    <p class="privacy-note" id="privacy-note">Nadie está mirando. Nadie sabrá tu respuesta. Solo tú.</p>
-    <div class="final-buttons" id="final-buttons">
+    <p class="signature" id="final-signature" style="opacity:0;">— Nicolás</p>
+    <p class="privacy-note" id="privacy-note" style="opacity:0;">Nadie está mirando. Nadie sabrá tu respuesta. Solo tú.</p>
+    <div class="final-buttons" id="final-buttons" style="opacity:0; pointer-events:none;">
       <button class="btn" onclick="answerYes()">Sí</button>
       <button class="btn" onclick="answerNo()">No</button>
     </div>
@@ -2024,24 +2041,22 @@ async function showFinalProposal() {
     }
   }
 
-  // Show signature, privacy note, and buttons with fade
+  // Show signature, privacy note, and buttons with fade — after text finishes
   await sleep(500);
-  document.getElementById('final-signature').style.opacity = '0';
-  document.getElementById('final-signature').style.transition = 'opacity 0.8s ease';
-  document.getElementById('privacy-note').style.opacity = '0';
-  document.getElementById('privacy-note').style.transition = 'opacity 0.8s ease';
-  document.getElementById('final-buttons').style.opacity = '0';
-  document.getElementById('final-buttons').style.transition = 'opacity 0.8s ease';
+  const sigEl = document.getElementById('final-signature');
+  const privEl = document.getElementById('privacy-note');
+  const btnsEl = document.getElementById('final-buttons');
 
-  setTimeout(() => {
-    document.getElementById('final-signature').style.opacity = '1';
-  }, 100);
-  setTimeout(() => {
-    document.getElementById('privacy-note').style.opacity = '1';
-  }, 600);
-  setTimeout(() => {
-    document.getElementById('final-buttons').style.opacity = '1';
-  }, 1200);
+  sigEl.style.transition = 'opacity 0.8s ease';
+  privEl.style.transition = 'opacity 0.8s ease';
+  btnsEl.style.transition = 'opacity 0.8s ease';
+
+  sigEl.style.opacity = '1';
+  await sleep(600);
+  privEl.style.opacity = '1';
+  await sleep(600);
+  btnsEl.style.opacity = '1';
+  btnsEl.style.pointerEvents = 'auto';
 }
 
 // ============================================================
