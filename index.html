@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta property="og:title" content="Sin Ser Nada">
+  <meta property="og:description" content="Un poema para Lunna">
+  <title>Sin Ser Nada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ========== RESET & BASE ========== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: 'Lora', serif;
+      background: #0a0e1a;
+      color: #e8e0d4;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ========== STAR CANVAS ========== */
+    #star-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ========== PETAL CONTAINER ========== */
+    #petal-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      width: 12px; height: 18px;
+      background: radial-gradient(ellipse at center, #c45c5c 0%, #a0826d 100%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0;
+      animation: petalFall linear forwards;
+    }
+    @keyframes petalFall {
+      0% { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(110vh) rotate(720deg) scale(0.3); }
+    }
+
+    /* ========== CHERRY CONTAINER ========== */
+    .cherry {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: cherryFall linear forwards;
+      pointer-events: none;
+    }
+    @keyframes cherryFall {
+      0% { opacity: 0; transform: translateY(-20px) rotate(0deg); }
+      10% { opacity: 1; }
+      90% { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(110vh) rotate(540deg); }
+    }
+
+    /* ========== MOON RAIN ========== */
+    .moon-rain {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0;
+      animation: moonRainFall linear forwards;
+      pointer-events: none;
+    }
+    @keyframes moonRainFall {
+      0% { opacity: 0; transform: translateY(-20px) scale(0.5); }
+      10% { opacity: 1; }
+      90% { opacity: 0.7; }
+      100% { opacity: 0; transform: translateY(110vh) scale(1.2); }
+    }
+
+    /* ========== LUNA (MOON) ========== */
+    #moon-container {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 5;
+      pointer-events: none;
+      transition: all 1.5s ease;
+    }
+    .moon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: #f5edd6;
+      box-shadow: 0 0 20px rgba(245, 237, 214, 0.3);
+      position: relative;
+      transition: all 1.5s ease;
+    }
+    .moon-shadow {
+      position: absolute;
+      top: -2px; left: -2px;
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: #0a0e1a;
+      transition: all 1.5s ease;
+    }
+    /* Phase 0: new moon (barely visible) */
+    .moon-phase-0 .moon { box-shadow: 0 0 8px rgba(245,237,214,0.1); }
+    .moon-phase-0 .moon-shadow { transform: translateX(0px); }
+    /* Phase 1: waxing crescent */
+    .moon-phase-1 .moon { box-shadow: 0 0 12px rgba(245,237,214,0.2); }
+    .moon-phase-1 .moon-shadow { transform: translateX(10px); }
+    /* Phase 2 */
+    .moon-phase-2 .moon { box-shadow: 0 0 15px rgba(245,237,214,0.3); }
+    .moon-phase-2 .moon-shadow { transform: translateX(18px); }
+    /* Phase 3: first quarter */
+    .moon-phase-3 .moon { box-shadow: 0 0 18px rgba(245,237,214,0.35); }
+    .moon-phase-3 .moon-shadow { transform: translateX(26px); }
+    /* Phase 4 */
+    .moon-phase-4 .moon { box-shadow: 0 0 22px rgba(245,237,214,0.4); }
+    .moon-phase-4 .moon-shadow { transform: translateX(32px); }
+    /* Phase 5: waxing gibbous */
+    .moon-phase-5 .moon { box-shadow: 0 0 26px rgba(245,237,214,0.5); }
+    .moon-phase-5 .moon-shadow { transform: translateX(38px); }
+    /* Phase 6 */
+    .moon-phase-6 .moon { box-shadow: 0 0 30px rgba(245,237,214,0.55); }
+    .moon-phase-6 .moon-shadow { transform: translateX(44px); }
+    /* Phase 7 */
+    .moon-phase-7 .moon { box-shadow: 0 0 34px rgba(245,237,214,0.6); }
+    .moon-phase-7 .moon-shadow { transform: translateX(50px); }
+    /* Phase 8 */
+    .moon-phase-8 .moon { box-shadow: 0 0 38px rgba(245,237,214,0.7); }
+    .moon-phase-8 .moon-shadow { transform: translateX(56px); }
+    /* Phase 9: full moon */
+    .moon-phase-9 .moon { box-shadow: 0 0 50px rgba(245,237,214,0.9), 0 0 100px rgba(245,237,214,0.3); }
+    .moon-phase-9 .moon-shadow { transform: translateX(70px); }
+
+    /* ========== RECUERDOS (MEMORIES) BAR ========== */
+    #memories-bar {
+      position: fixed;
+      top: 12px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+    #memories-bar.visible { opacity: 1; pointer-events: auto; }
+    .memory-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(160, 130, 109, 0.2);
+      border: 1px solid rgba(160, 130, 109, 0.3);
+      transition: all 0.6s ease;
+      cursor: pointer;
+    }
+    .memory-dot.collected {
+      background: #a0826d;
+      border-color: #f5edd6;
+      box-shadow: 0 0 8px rgba(160, 130, 109, 0.6);
+      animation: memoryPulse 2s ease-in-out infinite;
+    }
+    @keyframes memoryPulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(160,130,109,0.6); }
+      50% { box-shadow: 0 0 16px rgba(160,130,109,0.9); }
+    }
+
+    /* ========== MEMORY POPUP ========== */
+    #memory-popup {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      z-index: 200;
+      background: rgba(10, 14, 26, 0.95);
+      border: 1px solid rgba(160, 130, 109, 0.4);
+      border-radius: 16px;
+      padding: 24px 32px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #memory-popup.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+    #memory-popup .mem-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    #memory-popup .mem-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #f5edd6;
+      margin-bottom: 4px;
+    }
+    #memory-popup .mem-label {
+      font-size: 0.8rem;
+      color: #a0826d;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ========== MAIN SCREENS ========== */
+    .screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 60px 24px 40px;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #verse-screen {
+      justify-content: flex-start;
+      padding-top: 80px;
+    }
+    #final-screen {
+      justify-content: center;
+    }
+
+    /* ========== TITLE SCREEN ========== */
+    #title-screen {
+      justify-content: center;
+      gap: 20px;
+    }
+    #title-screen h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #f5edd6;
+      text-shadow: 0 0 40px rgba(245, 237, 214, 0.3);
+      letter-spacing: 2px;
+    }
+    #title-screen .subtitle {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #a0826d;
+      margin-top: -8px;
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      padding: 14px 42px;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      background: transparent;
+      color: #f5edd6;
+      border: 1px solid rgba(160, 130, 109, 0.5);
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    .btn:hover, .btn:active {
+      background: rgba(160, 130, 109, 0.15);
+      border-color: #a0826d;
+      box-shadow: 0 0 20px rgba(160, 130, 109, 0.2);
+    }
+    .btn-accent {
+      background: rgba(160, 130, 109, 0.2);
+      border-color: #a0826d;
+    }
+    .btn-small {
+      padding: 10px 24px;
+      font-size: 0.9rem;
+    }
+
+    /* ========== VERSE SCREEN ========== */
+    .verse-content {
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+    }
+    .verse-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #f5edd6;
+      margin-bottom: 24px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      text-shadow: 0 0 20px rgba(245, 237, 214, 0.2);
+    }
+    .verse-title.visible { opacity: 1; }
+    .verse-text {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #e8e0d4;
+      text-align: left;
+      min-height: 60px;
+    }
+    .verse-text .cafe-word {
+      color: #a0826d;
+      text-shadow: 0 0 8px rgba(160, 130, 109, 0.3);
+    }
+
+    /* Tap to continue indicator */
+    .tap-continue {
+      margin-top: 32px;
+      font-size: 0.8rem;
+      color: rgba(160, 130, 109, 0.5);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      animation: tapPulse 2s ease-in-out infinite;
+    }
+    .tap-continue.visible { opacity: 1; }
+    @keyframes tapPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ========== CHOICE OVERLAY ========== */
+    #choice-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 100;
+      background: rgba(10, 14, 26, 0.92);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    #choice-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #choice-question {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #f5edd6;
+      text-align: center;
+      max-width: 340px;
+      margin-bottom: 12px;
+    }
+    .choice-btn {
+      padding: 14px 28px;
+      font-family: 'Lora', serif;
+      font-size: 0.95rem;
+      background: rgba(160, 130, 109, 0.1);
+      color: #e8e0d4;
+      border: 1px solid rgba(160, 130, 109, 0.35);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .choice-btn:hover, .choice-btn:active {
+      background: rgba(160, 130, 109, 0.25);
+      border-color: #a0826d;
+      transform: scale(1.02);
+    }
+
+    /* ========== CHOICE RESPONSE ========== */
+    #choice-response {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 100;
+      background: rgba(10, 14, 26, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    #choice-response.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #choice-response-text {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: #a0826d;
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.8;
+    }
+
+    /* ========== VIDEO PLAYER ========== */
+    #video-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 150;
+      background: rgba(10, 14, 26, 0.97);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      gap: 16px;
+    }
+    #video-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #video-overlay video {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+    .play-btn {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(160, 130, 109, 0.3);
+      border: 2px solid #a0826d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: playPulse 2s ease-in-out infinite;
+    }
+    .play-btn:hover { background: rgba(160, 130, 109, 0.5); transform: scale(1.1); }
+    @keyframes playPulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(160,130,109,0.3); }
+      50% { box-shadow: 0 0 25px rgba(160,130,109,0.6); }
+    }
+    .play-btn svg { width: 28px; height: 28px; fill: #f5edd6; margin-left: 4px; }
+    .play-label {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: #a0826d;
+    }
+
+    /* ========== FINAL SCREEN ========== */
+    #final-screen .final-message {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #e8e0d4;
+      max-width: 340px;
+      text-align: center;
+    }
+    #final-screen .signature {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #a0826d;
+      margin-top: 16px;
+    }
+    .privacy-note {
+      font-size: 0.8rem;
+      color: rgba(160, 130, 109, 0.5);
+      font-style: italic;
+      margin: 16px 0;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    /* ========== YES/NO BUTTONS ========== */
+    .final-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .final-buttons .btn {
+      min-width: 100px;
+    }
+
+    /* ========== CONCERT OPTIONS ========== */
+    .concert-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    /* ========== CONSTELLATION ========== */
+    #constellation-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 8;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    #constellation-canvas.visible { opacity: 1; }
+
+    /* ========== EASTER EGG: 11:11 ========== */
+    .special-star {
+      position: fixed;
+      font-size: 0.7rem;
+      color: #f5edd6;
+      text-shadow: 0 0 10px rgba(245,237,214,0.8);
+      z-index: 6;
+      pointer-events: none;
+      animation: specialStarPulse 3s ease-in-out infinite;
+    }
+    @keyframes specialStarPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* ========== THURSDAY EASTER EGG ========== */
+    .thursday-line {
+      color: #a0826d;
+      font-style: italic;
+      margin-top: 8px;
+      opacity: 0;
+      animation: fadeInSlow 1.5s ease forwards;
+    }
+    @keyframes fadeInSlow { to { opacity: 1; } }
+
+    /* ========== LOADING ========== */
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 999;
+      background: #0a0e1a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      transition: opacity 0.8s ease;
+    }
+    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    .loading-moon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #f5edd6;
+      box-shadow: 0 0 20px rgba(245,237,214,0.4);
+      animation: loadingPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes loadingPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+    .loading-text {
+      font-family: 'Lora', serif;
+      font-size: 0.85rem;
+      color: #a0826d;
+      letter-spacing: 2px;
+    }
+
+    /* ========== CLOSE SCREEN (after yes/no) ========== */
+    .close-message {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: rgba(232, 224, 212, 0.7);
+      text-align: center;
+      max-width: 320px;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 380px) {
+      #title-screen h1 { font-size: 2rem; }
+      .verse-title { font-size: 1.3rem; }
+      .verse-text { font-size: 0.95rem; }
+      .btn { padding: 12px 32px; font-size: 0.9rem; }
+      .choice-btn { padding: 12px 20px; font-size: 0.85rem; }
+    }
+    @media (min-height: 800px) {
+      .verse-content { max-width: 420px; }
+    }
+
+    /* ========== SCROLL STYLING ========== */
+    .screen::-webkit-scrollbar { width: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Star Canvas (parallax background) -->
+  <canvas id="star-canvas"></canvas>
+
+  <!-- Petal / Cherry / Moon Rain Container -->
+  <div id="petal-container"></div>
+
+  <!-- Moon -->
+  <div id="moon-container" class="moon-phase-0">
+    <div class="moon">
+      <div class="moon-shadow"></div>
+    </div>
+  </div>
+
+  <!-- Memories Bar -->
+  <div id="memories-bar">
+    <div class="memory-dot" data-index="0" title="El Primer Impacto"></div>
+    <div class="memory-dot" data-index="1" title="El Arete de Cereza"></div>
+    <div class="memory-dot" data-index="2" title="Las Noches de Jueves"></div>
+    <div class="memory-dot" data-index="3" title="La Mirada de Medusa"></div>
+    <div class="memory-dot" data-index="4" title="El Enigma"></div>
+    <div class="memory-dot" data-index="5" title="El Dibujo"></div>
+    <div class="memory-dot" data-index="6" title="El Concierto"></div>
+    <div class="memory-dot" data-index="7" title="Sin Ser Nada"></div>
+    <div class="memory-dot" data-index="8" title="La Luna"></div>
+  </div>
+
+  <!-- Memory Popup -->
+  <div id="memory-popup">
+    <div class="mem-icon"></div>
+    <div class="mem-title"></div>
+    <div class="mem-label">recuerdo desbloqueado</div>
+  </div>
+
+  <!-- Constellation Canvas (final) -->
+  <canvas id="constellation-canvas"></canvas>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-moon"></div>
+    <div class="loading-text">cargando...</div>
+  </div>
+
+  <!-- ===== TITLE SCREEN ===== -->
+  <div id="title-screen" class="screen">
+    <h1>Sin Ser Nada</h1>
+    <p class="subtitle">Un poema para Lunna</p>
+    <button class="btn" onclick="startGame()" style="margin-top: 24px;">Comenzar</button>
+  </div>
+
+  <!-- ===== VERSE SCREENS (dynamic) ===== -->
+  <div id="verse-screen" class="screen">
+    <div class="verse-content">
+      <h2 class="verse-title" id="verse-title"></h2>
+      <div class="verse-text" id="verse-text"></div>
+      <div class="tap-continue" id="tap-continue">toca para continuar</div>
+    </div>
+  </div>
+
+  <!-- ===== CHOICE OVERLAY ===== -->
+  <div id="choice-overlay">
+    <p id="choice-question"></p>
+    <div id="choice-buttons"></div>
+  </div>
+
+  <!-- ===== CHOICE RESPONSE ===== -->
+  <div id="choice-response">
+    <p id="choice-response-text"></p>
+  </div>
+
+  <!-- ===== VIDEO OVERLAY ===== -->
+  <div id="video-overlay">
+    <div class="play-btn" id="play-video-btn" onclick="playConcierto()">
+      <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    </div>
+    <p class="play-label">Dale play</p>
+    <video id="concierto-video" playsinline preload="auto" style="display:none;">
+      <source src="assets/concierto.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- ===== FINAL SCREEN (proposal) ===== -->
+  <div id="final-screen" class="screen">
+    <div class="final-message" id="final-message"></div>
+    <p class="signature" id="final-signature">— Nicolás</p>
+    <p class="privacy-note" id="privacy-note">Nadie está mirando. Nadie sabrá tu respuesta. Solo tú.</p>
+    <div class="final-buttons" id="final-buttons">
+      <button class="btn" onclick="answerYes()">Sí</button>
+      <button class="btn" onclick="answerNo()">No</button>
+    </div>
+  </div>
+
+  <!-- ===== CONCERT OPTIONS (after yes) ===== -->
+  <div id="concert-screen" class="screen">
+    <p style="font-family:'Playfair Display',serif; font-size:1.3rem; color:#f5edd6; margin-bottom:8px; text-align:center;">Entonces...</p>
+    <div class="concert-options" id="concert-options">
+      <button class="choice-btn" onclick="chooseConcert(1)">2 de mayo — el mejor concierto de tu vida</button>
+      <button class="choice-btn" onclick="chooseConcert(2)">7 de mayo — el mejor concierto de tu vida</button>
+      <button class="choice-btn" onclick="chooseConcert(3)" style="font-style:italic;">Choose one of the above</button>
+    </div>
+  </div>
+
+  <!-- ===== NO RESPONSE SCREEN ===== -->
+  <div id="no-screen" class="screen">
+    <p class="close-message">Está bien. Gracias por leer hasta aquí. Esto fue real, y es tuyo.</p>
+  </div>
+
+  <!-- ===== CLOSING SCREEN (constellation) ===== -->
+  <div id="closing-screen" class="screen">
+    <p id="closing-text" style="font-family:'Lora',serif; font-style:italic; font-size:0.9rem; color:rgba(160,130,109,0.7); text-align:center; max-width:300px;"></p>
+  </div>
+
+<script>
+// ============================================================
+//  GAME DATA
+// ============================================================
+const MEMORIES = [
+  { icon: '🌙', name: 'El Primer Impacto' },
+  { icon: '🍒', name: 'El Arete de Cereza' },
+  { icon: '⏳', name: 'Las Noches de Jueves' },
+  { icon: '👁️', name: 'La Mirada de Medusa' },
+  { icon: '🌀', name: 'El Enigma' },
+  { icon: '✏️', name: 'El Dibujo' },
+  { icon: '🎵', name: 'El Concierto' },
+  { icon: '💫', name: 'Sin Ser Nada' },
+  { icon: '🌕', name: 'La Luna' },
+];
+
+// Café-highlighted words
+const CAFE_WORDS = ['café', 'luna', 'lunna', 'medusa', 'chaqueta', 'lunares', 'cereza', 'laberinto', 'enigma'];
+
+const VERSES = [
+  {
+    id: 'prologo',
+    title: 'Prólogo',
+    lines: [
+      'Una noche cualquiera,',
+      'un bar, un segundo piso,',
+      'y el destino esperándome arriba',
+      'con algo que no buscaba.',
+    ],
+    memory: null,
+    choice: null,
+    moonPhase: 0,
+  },
+  {
+    id: 'verso1',
+    title: 'La Primera Vez',
+    lines: [
+      'Subí las escaleras sin saber',
+      'que arriba me esperaba un impacto',
+      'que no puedo describir como bonito —',
+      'fue más que eso, fue genuino.',
+      '',
+      'Algo en ti me detuvo,',
+      'como si el mundo se callara un segundo',
+      'solo para que yo pudiera escuchar',
+      'lo que mi pecho intentaba decirme.',
+    ],
+    memory: 0,
+    choice: {
+      question: '"Esa noche en el bar..."',
+      options: [
+        { text: 'Sentí curiosidad', response: 'La curiosidad es el principio de todo. Y esa noche, fue el principio de esto.' },
+        { text: 'Algo me dijo que era diferente', response: 'Algo te lo dijo... y tenía razón. Esa noche cambió todo sin hacer ruido.' },
+      ],
+    },
+    moonPhase: 1,
+  },
+  {
+    id: 'verso2',
+    title: 'El Arete de Cereza',
+    lines: [
+      'Perdiste un arete de cereza',
+      'y yo lo encontré entre la multitud.',
+      'Un juego con el destino, una apuesta:',
+      'devolvértelo o guardarlo como excusa',
+      'para volverte a ver.',
+      '',
+      'Escogí lo segundo.',
+      'Y el destino, por primera vez,',
+      'me dio la razón.',
+    ],
+    memory: 1,
+    choice: {
+      question: '"El arete de cereza..."',
+      options: [
+        { text: 'Lo hubiera buscado yo misma', response: 'Tal vez sí, tal vez no. Pero el destino quiso que lo encontrara yo primero.' },
+        { text: 'Qué bueno que lo encontraste', response: 'Qué bueno, sí. Aunque creo que el arete me encontró a mí.' },
+      ],
+    },
+    moonPhase: 2,
+  },
+  {
+    id: 'verso3',
+    title: 'Las 5 Citas',
+    lines: [
+      'No eres fácil — y eso me fascina.',
+      'Cinco veces bastaron',
+      'para saber que seis horas contigo',
+      'pasan en un parpadeo.',
+      '',
+      'Jueves de hablar hasta las cuatro,',
+      'de reír sin razón,',
+      'de helado y confesiones',
+      'que nadie más va a escuchar.',
+    ],
+    memory: 2,
+    choice: {
+      question: '"De las cinco citas, tu momento favorito..."',
+      options: [
+        { text: 'Las charlas de jueves', response: 'Los jueves se volvieron nuestro día sin que nadie lo decidiera. Simplemente pasó.' },
+        { text: 'El helado y las confesiones', response: 'Las confesiones a medianoche, con helado de por medio. Las mejores conversaciones nacen así.' },
+        { text: 'Todo. El tiempo siempre pasaba rápido', response: 'Seis horas en un parpadeo. Cada vez. Eso dice más que cualquier palabra.' },
+      ],
+    },
+    moonPhase: 3,
+  },
+  {
+    id: 'verso4',
+    title: 'Tu Mirada',
+    lines: [
+      'Tu mirada me hipnotiza',
+      'como Medusa — me vuelve piedra.',
+      'Me domina como una cobra,',
+      'pero en vez de veneno',
+      'me inyecta algo que no tenía nombre.',
+      '',
+      'Y tus lunares, Lunna...',
+      'son perfectos, como constelaciones',
+      'dibujadas en tu piel con propósito.',
+      'Cada uno un punto en un mapa',
+      'que quiero aprender de memoria.',
+    ],
+    memory: 3,
+    choice: {
+      question: '"Cuando me miras, yo veo..."',
+      options: [
+        { text: 'Alguien que quiere ser visto de verdad', response: 'Ver de verdad... sí. Y me gusta que tú me dejes intentarlo.' },
+        { text: 'Un laberinto del que no quiero salir', response: 'Un laberinto. Y cada vez que creo encontrar la salida, descubro un camino nuevo.' },
+      ],
+    },
+    moonPhase: 4,
+  },
+  {
+    id: 'verso5',
+    title: 'El Enigma',
+    lines: [
+      'Eres un laberinto, un enigma',
+      'que me confunde y me atrae al mismo tiempo.',
+      'Tus palabras me dicen una cosa,',
+      'tus acciones me muestran otra,',
+      'y las dos me fascinan.',
+      '',
+      'Me pones a pensar con cada frase,',
+      'a soñar con cada silencio.',
+      '¿Qué está pasando?',
+      '¿Por qué esta chica me dice estas cosas?',
+      'Y yo, perdido en el laberinto,',
+      'no quiero encontrar la salida.',
+    ],
+    memory: 4,
+    moonPhase: 5,
+    choice: null,
+  },
+  {
+    id: 'verso6',
+    title: 'Los Dibujos',
+    lines: [
+      'Te dibujé obsesivamente',
+      'porque quería entender',
+      'cada pedazo de piel,',
+      'cada rasgo de tu cara,',
+      'cada lunar que te hace única.',
+      '',
+      'Si extrañarte fuera un arte,',
+      'haría cuadros con tu cara',
+      'que valdrían un millón.',
+      'Pero prefiero verte',
+      'a solo soñarte.',
+    ],
+    memory: 5,
+    moonPhase: 6,
+    choice: null,
+  },
+  {
+    id: 'verso7',
+    title: 'El Concierto',
+    lines: [
+      'Quise llevarte a un concierto.',
+      'Te llamé, pero no contestaste.',
+      'Esperé tu llamada de regreso',
+      'que nunca llegó.',
+      '',
+      'Fui solo, con una misión:',
+      'grabar una canción que me recordaba a ti.',
+      '',
+      'Y al salir, sin pensar,',
+      'de tres chaquetas elegí una —',
+      'la que te presté, la que guardaba tu olor.',
+      'Un 33% de probabilidad',
+      'que el destino volvió a ganar.',
+      '',
+      'Me sentí a gusto.',
+      'Sentí que ir y grabar ese momento',
+      'era lo correcto.',
+    ],
+    memory: 6,
+    moonPhase: 7,
+    choice: {
+      question: '"La chaqueta..."',
+      options: [
+        { text: 'El destino sabe lo que hace', response: 'El destino, las coincidencias, o algo más. Sea lo que sea, esa noche eligió bien.' },
+        { text: 'A veces las coincidencias no existen', response: 'No existen. Y ese 33% nunca fue una casualidad.' },
+      ],
+    },
+    showVideo: true,
+  },
+  {
+    id: 'verso8',
+    title: 'Sin Ser Nada',
+    lines: [
+      'Sin ser nada,',
+      'absolutamente nada,',
+      'te metiste en mi cabeza',
+      'y ya no salías de ella.',
+      '',
+      'Y la verdad...',
+      'no me molesta.',
+      '',
+      'Disfruto las charlas,',
+      'cómo me hablas,',
+      'cómo piensas, cómo me miras,',
+      'cómo mi carro se llena',
+      'de tu energía cuando entras en él.',
+      '',
+      'No sé qué es esto.',
+      'Pero quiero seguir averiguándolo.',
+    ],
+    memory: 7,
+    moonPhase: 8,
+    choice: null,
+  },
+  {
+    id: 'verso9',
+    title: 'La Luna',
+    lines: [
+      'Quiero conocerte, Lunna.',
+      'Y parte de conocerte es aprender de ti.',
+      '',
+      'Quiero saber de tu brujería,',
+      'quiero que me enseñes qué cosas',
+      'se le piden a la luna.',
+      'Quiero entender el poder del café',
+      'que tanto te gusta.',
+      'Quiero escucharte cantar',
+      'las canciones de tus artistas favoritos.',
+      '',
+      'Quiero ponerte más planes y decirte: choose one.',
+      'Quiero decirte más cosas en inglés.',
+      'Quiero hacerme el tonto y que te rías.',
+      'Quiero dibujarte hasta que me canse.',
+      'Quiero soñarte hasta volver a verte.',
+      'Quiero seguirte diciendo',
+      'buenas noches, Lunna.',
+    ],
+    memory: 8,
+    moonPhase: 9,
+    choice: null,
+  },
+  {
+    id: 'final_poem',
+    title: 'La Llave',
+    lines: [
+      'No buscaba nada',
+      'y apareciste.',
+      '',
+      'No sé qué es esto,',
+      'pero me gusta.',
+      'Y si hay un laberinto,',
+      'prefiero perderme en él',
+      'que encontrar la salida.',
+      '',
+      'Solo quiero seguir descubriendo',
+      'qué más hay por conocer de ti.',
+    ],
+    memory: null,
+    moonPhase: 9,
+    choice: null,
+  },
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let currentVerse = -1; // -1 = title screen
+let currentLineIndex = 0;
+let isTyping = false;
+let typingTimeout = null;
+let typewriterResolve = null;
+let collectedMemories = [];
+let choiceHistory = [];
+let gameStarted = false;
+let awaitingTap = false;
+let videoPlayed = false;
+let secretBuffer = '';
+
+// ============================================================
+//  STAR CANVAS (parallax)
+// ============================================================
+const starCanvas = document.getElementById('star-canvas');
+const starCtx = starCanvas.getContext('2d');
+let stars = [];
+let starAnimFrame = null;
+
+function initStarCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  starCanvas.width = window.innerWidth * dpr;
+  starCanvas.height = window.innerHeight * dpr;
+  starCanvas.style.width = window.innerWidth + 'px';
+  starCanvas.style.height = window.innerHeight + 'px';
+  starCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  stars = [];
+  for (let layer = 0; layer < 3; layer++) {
+    const count = layer === 0 ? 40 : layer === 1 ? 30 : 20;
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: 0.5 + layer * 0.5 + Math.random() * 0.5,
+        speed: 0.05 + layer * 0.1,
+        layer,
+        brightness: 0.3 + Math.random() * 0.5,
+        twinkleOffset: Math.random() * Math.PI * 2,
+        twinkleSpeed: 0.005 + Math.random() * 0.01,
+        color: layer === 2 ? (Math.random() > 0.8 ? '#a0826d' : '#f5edd6') : '#f5edd6',
+      });
+    }
+  }
+}
+
+let starTime = 0;
+function drawStars() {
+  starTime += 0.016;
+  starCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+  // Background gradient
+  const grad = starCtx.createLinearGradient(0, 0, 0, window.innerHeight);
+  grad.addColorStop(0, '#0a0e1a');
+  grad.addColorStop(0.5, '#111827');
+  grad.addColorStop(1, '#0a0e1a');
+  starCtx.fillStyle = grad;
+  starCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+  for (const s of stars) {
+    s.y += s.speed;
+    if (s.y > window.innerHeight + 5) {
+      s.y = -5;
+      s.x = Math.random() * window.innerWidth;
+    }
+    const twinkle = 0.5 + 0.5 * Math.sin(starTime * s.twinkleSpeed * 60 + s.twinkleOffset);
+    const alpha = s.brightness * twinkle;
+    starCtx.beginPath();
+    starCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    starCtx.fillStyle = s.color;
+    starCtx.globalAlpha = alpha;
+    starCtx.fill();
+  }
+  starCtx.globalAlpha = 1;
+  starAnimFrame = requestAnimationFrame(drawStars);
+}
+
+// ============================================================
+//  CONSTELLATION CANVAS (final)
+// ============================================================
+const constCanvas = document.getElementById('constellation-canvas');
+const constCtx = constCanvas.getContext('2d');
+let constStars = [];
+let constAnimFrame = null;
+let constTime = 0;
+
+function initConstellation() {
+  const dpr = window.devicePixelRatio || 1;
+  constCanvas.width = window.innerWidth * dpr;
+  constCanvas.height = window.innerHeight * dpr;
+  constCanvas.style.width = window.innerWidth + 'px';
+  constCanvas.style.height = window.innerHeight + 'px';
+  constCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  const radius = Math.min(window.innerWidth, window.innerHeight) * 0.3;
+
+  constStars = MEMORIES.map((m, i) => {
+    const angle = (i / MEMORIES.length) * Math.PI * 2 - Math.PI / 2;
+    return {
+      x: cx + Math.cos(angle) * radius + (Math.random() - 0.5) * 20,
+      y: cy + Math.sin(angle) * radius + (Math.random() - 0.5) * 20,
+      icon: m.icon,
+      name: m.name,
+      collected: collectedMemories.includes(i),
+      isMAI: m.name === 'El Primer Impacto', // MAI easter egg
+      isConcierto: m.name === 'El Concierto', // special glow
+    };
+  });
+}
+
+function drawConstellation() {
+  constTime += 0.016;
+  constCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+  // Draw connecting lines
+  constCtx.strokeStyle = 'rgba(160, 130, 109, 0.25)';
+  constCtx.lineWidth = 1;
+  for (let i = 0; i < constStars.length; i++) {
+    const next = constStars[(i + 1) % constStars.length];
+    constCtx.beginPath();
+    constCtx.moveTo(constStars[i].x, constStars[i].y);
+    constCtx.lineTo(next.x, next.y);
+    constCtx.stroke();
+  }
+  // Cross lines for more constellation feel
+  if (constStars.length >= 5) {
+    constCtx.strokeStyle = 'rgba(160, 130, 109, 0.12)';
+    constCtx.beginPath();
+    constCtx.moveTo(constStars[0].x, constStars[0].y);
+    constCtx.lineTo(constStars[4].x, constStars[4].y);
+    constCtx.stroke();
+    constCtx.beginPath();
+    constCtx.moveTo(constStars[2].x, constStars[2].y);
+    constCtx.lineTo(constStars[7].x, constStars[7].y);
+    constCtx.stroke();
+  }
+
+  // Draw stars
+  for (const s of constStars) {
+    const pulse = 0.8 + 0.2 * Math.sin(constTime * 2 + constStars.indexOf(s));
+    const glow = s.collected ? 12 : 4;
+    const alpha = s.collected ? pulse : 0.3;
+
+    // Glow
+    constCtx.beginPath();
+    constCtx.arc(s.x, s.y, glow, 0, Math.PI * 2);
+    constCtx.fillStyle = s.isConcierto
+      ? `rgba(196, 92, 92, ${alpha * 0.5})`
+      : `rgba(160, 130, 109, ${alpha * 0.4})`;
+    constCtx.fill();
+
+    // Star point
+    constCtx.beginPath();
+    constCtx.arc(s.x, s.y, s.collected ? 4 : 2, 0, Math.PI * 2);
+    constCtx.fillStyle = s.collected ? '#f5edd6' : 'rgba(245,237,214,0.3)';
+    constCtx.fill();
+
+    // Icon (for collected)
+    if (s.collected) {
+      constCtx.font = '14px serif';
+      constCtx.textAlign = 'center';
+      constCtx.fillText(s.icon, s.x, s.y - 14);
+    }
+
+    // MAI label
+    if (s.isMAI && s.collected) {
+      constCtx.font = 'italic 10px Lora, serif';
+      constCtx.fillStyle = 'rgba(160,130,109,0.6)';
+      constCtx.textAlign = 'center';
+      constCtx.fillText('MAI', s.x, s.y + 20);
+    }
+  }
+
+  constAnimFrame = requestAnimationFrame(drawConstellation);
+}
+
+// ============================================================
+//  TYPEWRITER
+// ============================================================
+let _currentTypeSpan = null;
+let _currentTypeHighlighted = '';
+
+function typewriteLine(container, text, speed = 50) {
+  return new Promise((resolve) => {
+    typewriterResolve = resolve;
+    isTyping = true;
+
+    // Highlight café words
+    const highlighted = highlightCafeWords(text);
+    _currentTypeHighlighted = highlighted;
+
+    let charIdx = 0;
+    const plainText = text;
+    const span = document.createElement('span');
+    span.innerHTML = '';
+    container.appendChild(span);
+    _currentTypeSpan = span;
+
+    function typeNext() {
+      if (charIdx >= plainText.length) {
+        // Replace with highlighted version
+        span.innerHTML = highlighted;
+        isTyping = false;
+        typewriterResolve = null;
+        _currentTypeSpan = null;
+        resolve();
+        return;
+      }
+      charIdx++;
+      // Show plain text while typing
+      span.textContent = plainText.substring(0, charIdx);
+      typingTimeout = setTimeout(typeNext, speed);
+    }
+    typeNext();
+  });
+}
+
+function skipTypewriter() {
+  if (isTyping && typingTimeout) {
+    clearTimeout(typingTimeout);
+    typingTimeout = null;
+    isTyping = false;
+    // Apply highlighted text when skipping
+    if (_currentTypeSpan) {
+      _currentTypeSpan.innerHTML = _currentTypeHighlighted;
+      _currentTypeSpan = null;
+    }
+    if (typewriterResolve) {
+      const r = typewriterResolve;
+      typewriterResolve = null;
+      r();
+    }
+  }
+}
+
+function highlightCafeWords(text) {
+  let result = escapeHtml(text);
+  for (const word of CAFE_WORDS) {
+    const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
+    result = result.replace(regex, '<span class="cafe-word">$1</span>');
+  }
+  return result;
+}
+
+function escapeHtml(t) {
+  return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ============================================================
+//  VERSE DISPLAY
+// ============================================================
+async function showVerse(verseIndex) {
+  const verse = VERSES[verseIndex];
+  currentVerse = verseIndex;
+
+  // Update moon
+  setMoonPhase(verse.moonPhase);
+
+  // Show memories bar after prologue
+  if (verseIndex >= 1) {
+    document.getElementById('memories-bar').classList.add('visible');
+  }
+
+  // Transition screens
+  await transitionToScreen('verse-screen');
+
+  // Set title
+  const titleEl = document.getElementById('verse-title');
+  titleEl.textContent = verse.title;
+  titleEl.classList.remove('visible');
+  setTimeout(() => titleEl.classList.add('visible'), 100);
+
+  // Clear text area
+  const textEl = document.getElementById('verse-text');
+  textEl.innerHTML = '';
+
+  // Hide tap indicator
+  const tapEl = document.getElementById('tap-continue');
+  tapEl.classList.remove('visible');
+
+  // Type each line
+  const screen = document.getElementById('verse-screen');
+  for (let i = 0; i < verse.lines.length; i++) {
+    const line = verse.lines[i];
+    if (line === '') {
+      const br = document.createElement('div');
+      br.style.height = '12px';
+      textEl.appendChild(br);
+      await sleep(200);
+    } else {
+      await typewriteLine(textEl, line, 45);
+      const br = document.createElement('br');
+      textEl.appendChild(br);
+      // Auto-scroll to keep new text visible
+      screen.scrollTop = screen.scrollHeight;
+      await sleep(150);
+    }
+  }
+
+  // Thursday easter egg
+  const isThursday = new Date().getDay() === 4;
+  if (isThursday && verse.id === 'verso3') {
+    const thurLine = document.createElement('div');
+    thurLine.className = 'thursday-line';
+    thurLine.textContent = 'Es jueves. Nuestro día.';
+    textEl.appendChild(thurLine);
+  }
+
+  // Night easter egg
+  const hour = new Date().getHours();
+  const isNight = hour >= 22 || hour < 6;
+  if (isNight && verse.id === 'verso9') {
+    // The last line already says "buenas noches, Lunna" so it gets the effect naturally
+  }
+
+  // Show video button after verse 7
+  if (verse.showVideo && !videoPlayed) {
+    await sleep(500);
+    await showVideoOverlay();
+  }
+
+  // Collect memory
+  if (verse.memory !== null) {
+    await sleep(300);
+    await collectMemory(verse.memory);
+  }
+
+  // Show choice or continue
+  if (verse.choice) {
+    await sleep(400);
+    await showChoice(verse.choice);
+  } else if (verse.id === 'final_poem') {
+    await sleep(600);
+    showFinalProposal();
+  } else {
+    // Show tap to continue
+    awaitingTap = true;
+    tapEl.classList.add('visible');
+    await waitForTap();
+    tapEl.classList.remove('visible');
+    awaitingTap = false;
+
+    // Next verse
+    if (verseIndex + 1 < VERSES.length) {
+      showVerse(verseIndex + 1);
+    }
+  }
+}
+
+// ============================================================
+//  SCREEN TRANSITIONS (fade through black)
+// ============================================================
+let activeScreen = null;
+
+async function transitionToScreen(screenId) {
+  const newScreen = document.getElementById(screenId);
+
+  if (activeScreen) {
+    activeScreen.classList.remove('active');
+    await sleep(500);
+  }
+
+  newScreen.classList.add('active');
+  activeScreen = newScreen;
+  await sleep(300);
+}
+
+// ============================================================
+//  CHOICE SYSTEM
+// ============================================================
+function showChoice(choice) {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById('choice-overlay');
+    document.getElementById('choice-question').textContent = choice.question;
+    const btnContainer = document.getElementById('choice-buttons');
+    btnContainer.innerHTML = '';
+
+    choice.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = opt.text;
+      btn.onclick = () => {
+        choiceHistory.push({ question: choice.question, answer: opt.text });
+        overlay.classList.remove('active');
+        showChoiceResponse(opt.response).then(resolve);
+      };
+      btnContainer.appendChild(btn);
+    });
+
+    overlay.classList.add('active');
+  });
+}
+
+function showChoiceResponse(responseText) {
+  return new Promise((resolve) => {
+    const resp = document.getElementById('choice-response');
+    document.getElementById('choice-response-text').textContent = responseText;
+    resp.classList.add('active');
+
+    setTimeout(() => {
+      let resolved = false;
+      const handler = () => {
+        if (resolved) return;
+        resolved = true;
+        resp.classList.remove('active');
+        document.removeEventListener('click', handler);
+        document.removeEventListener('touchend', handler);
+        setTimeout(resolve, 400);
+      };
+      document.addEventListener('click', handler);
+      document.addEventListener('touchend', handler);
+    }, 1500);
+  });
+}
+
+// After choice resolved, continue to next verse
+async function afterChoice() {
+  if (currentVerse + 1 < VERSES.length) {
+    showVerse(currentVerse + 1);
+  }
+}
+
+// Override showChoice to chain into next verse
+const originalShowChoice = showChoice;
+showChoice = function(choice) {
+  return originalShowChoice(choice).then(() => {
+    if (currentVerse + 1 < VERSES.length && VERSES[currentVerse].id !== 'final_poem') {
+      return showVerse(currentVerse + 1);
+    }
+  });
+};
+
+// ============================================================
+//  MEMORY SYSTEM
+// ============================================================
+async function collectMemory(index) {
+  if (collectedMemories.includes(index)) return;
+  collectedMemories.push(index);
+
+  // Update dot
+  const dot = document.querySelector(`.memory-dot[data-index="${index}"]`);
+  if (dot) dot.classList.add('collected');
+
+  // Show popup
+  const popup = document.getElementById('memory-popup');
+  popup.querySelector('.mem-icon').textContent = MEMORIES[index].icon;
+  popup.querySelector('.mem-title').textContent = MEMORIES[index].name;
+  popup.classList.add('show');
+
+  await sleep(1800);
+  popup.classList.remove('show');
+  await sleep(300);
+}
+
+// ============================================================
+//  MOON PHASES
+// ============================================================
+function setMoonPhase(phase) {
+  const container = document.getElementById('moon-container');
+  // Remove all phase classes
+  for (let i = 0; i <= 9; i++) {
+    container.classList.remove(`moon-phase-${i}`);
+  }
+  container.classList.add(`moon-phase-${phase}`);
+}
+
+// ============================================================
+//  VIDEO OVERLAY (Concierto)
+// ============================================================
+function showVideoOverlay() {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById('video-overlay');
+    const video = document.getElementById('concierto-video');
+
+    // Show play button
+    document.getElementById('play-video-btn').style.display = 'flex';
+    document.querySelector('.play-label').style.display = 'block';
+    video.style.display = 'none';
+
+    overlay.classList.add('active');
+
+    // Store resolve for when video ends or user closes
+    window._videoResolve = resolve;
+  });
+}
+
+function playConcierto() {
+  const video = document.getElementById('concierto-video');
+  const playBtn = document.getElementById('play-video-btn');
+  const label = document.querySelector('.play-label');
+
+  playBtn.style.display = 'none';
+  label.style.display = 'none';
+  video.style.display = 'block';
+
+  video.play().catch(() => {});
+  videoPlayed = true;
+
+  video.onended = () => {
+    closeVideoOverlay();
+  };
+
+  // Also allow tapping video area to close after 3s
+  setTimeout(() => {
+    const closeHandler = (e) => {
+      if (e.target === video) return; // don't close if touching video controls
+      closeVideoOverlay();
+      document.getElementById('video-overlay').removeEventListener('click', closeHandler);
+    };
+    // Add a close button
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-small';
+    closeBtn.textContent = 'Continuar';
+    closeBtn.style.marginTop = '12px';
+    closeBtn.onclick = () => {
+      closeVideoOverlay();
+      closeBtn.remove();
+    };
+    document.getElementById('video-overlay').appendChild(closeBtn);
+  }, 5000);
+}
+
+function closeVideoOverlay() {
+  const overlay = document.getElementById('video-overlay');
+  const video = document.getElementById('concierto-video');
+  video.pause();
+  overlay.classList.remove('active');
+  // Remove any added close buttons
+  const extras = overlay.querySelectorAll('.btn-small');
+  extras.forEach(b => b.remove());
+
+  if (window._videoResolve) {
+    const r = window._videoResolve;
+    window._videoResolve = null;
+    setTimeout(r, 400);
+  }
+}
+
+// ============================================================
+//  FINAL PROPOSAL
+// ============================================================
+async function showFinalProposal() {
+  await sleep(800);
+  await transitionToScreen('final-screen');
+
+  const msg = document.getElementById('final-message');
+  msg.innerHTML = '';
+
+  const lines = [
+    'Lunna,',
+    '',
+    'Todo lo que leíste es real.',
+    'No todo tiene que tener un nombre o una etiqueta.',
+    'Solo sé que me la paso bien contigo',
+    'y quiero seguir descubriéndote.',
+    '',
+    'Entonces... ¿una cita más?',
+  ];
+
+  for (const line of lines) {
+    if (line === '') {
+      const br = document.createElement('div');
+      br.style.height = '10px';
+      msg.appendChild(br);
+      await sleep(200);
+    } else {
+      await typewriteLine(msg, line, 50);
+      const br = document.createElement('br');
+      msg.appendChild(br);
+      await sleep(200);
+    }
+  }
+
+  // Show signature, privacy note, and buttons with fade
+  await sleep(500);
+  document.getElementById('final-signature').style.opacity = '0';
+  document.getElementById('final-signature').style.transition = 'opacity 0.8s ease';
+  document.getElementById('privacy-note').style.opacity = '0';
+  document.getElementById('privacy-note').style.transition = 'opacity 0.8s ease';
+  document.getElementById('final-buttons').style.opacity = '0';
+  document.getElementById('final-buttons').style.transition = 'opacity 0.8s ease';
+
+  setTimeout(() => {
+    document.getElementById('final-signature').style.opacity = '1';
+  }, 100);
+  setTimeout(() => {
+    document.getElementById('privacy-note').style.opacity = '1';
+  }, 600);
+  setTimeout(() => {
+    document.getElementById('final-buttons').style.opacity = '1';
+  }, 1200);
+}
+
+// ============================================================
+//  YES / NO HANDLERS
+// ============================================================
+async function answerYes() {
+  // Celebration!
+  launchPetals(60);
+
+  // Flash moon bright
+  setMoonPhase(9);
+  const moonEl = document.querySelector('.moon');
+  moonEl.style.boxShadow = '0 0 80px rgba(245,237,214,1), 0 0 150px rgba(245,237,214,0.5)';
+
+  await sleep(1200);
+
+  // Show concert options
+  await transitionToScreen('concert-screen');
+}
+
+async function answerNo() {
+  await transitionToScreen('no-screen');
+  await sleep(3000);
+  showClosingScreen();
+}
+
+async function chooseConcert(option) {
+  await sleep(400);
+  showClosingScreen();
+}
+
+// ============================================================
+//  CLOSING SCREEN (constellation of memories)
+// ============================================================
+async function showClosingScreen() {
+  await transitionToScreen('closing-screen');
+
+  // Init and show constellation
+  initConstellation();
+  constCanvas.classList.add('visible');
+  drawConstellation();
+
+  // Night greeting
+  const hour = new Date().getHours();
+  const isNight = hour >= 22 || hour < 6;
+  const closingEl = document.getElementById('closing-text');
+
+  await sleep(2000);
+  if (isNight) {
+    closingEl.textContent = 'Buenas noches, Lunna.';
+  } else {
+    closingEl.textContent = 'Tus recuerdos, como constelaciones.';
+  }
+  closingEl.style.opacity = '0';
+  closingEl.style.transition = 'opacity 2s ease';
+  setTimeout(() => { closingEl.style.opacity = '1'; }, 100);
+}
+
+// ============================================================
+//  PETALS (adapted from mora-maze confetti)
+// ============================================================
+function launchPetals(count = 40) {
+  const container = document.getElementById('petal-container');
+  for (let i = 0; i < count; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.width = (8 + Math.random() * 10) + 'px';
+    petal.style.height = (12 + Math.random() * 14) + 'px';
+    const hue = Math.random() > 0.5 ? '#c45c5c' : '#a0826d';
+    petal.style.background = `radial-gradient(ellipse at center, ${hue} 0%, rgba(160,130,109,0.3) 100%)`;
+    petal.style.animationDuration = (4 + Math.random() * 4) + 's';
+    petal.style.animationDelay = (Math.random() * 2) + 's';
+    container.appendChild(petal);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 10000);
+}
+
+// ============================================================
+//  CHERRY RAIN (easter egg)
+// ============================================================
+function launchCherries(count = 30) {
+  const container = document.getElementById('petal-container');
+  for (let i = 0; i < count; i++) {
+    const cherry = document.createElement('div');
+    cherry.className = 'cherry';
+    cherry.textContent = '🍒';
+    cherry.style.left = Math.random() * 100 + '%';
+    cherry.style.animationDuration = (3 + Math.random() * 3) + 's';
+    cherry.style.animationDelay = (Math.random() * 1.5) + 's';
+    container.appendChild(cherry);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 7000);
+}
+
+// ============================================================
+//  MOON RAIN (LUNNA easter egg)
+// ============================================================
+function launchMoonRain(count = 40) {
+  const container = document.getElementById('petal-container');
+  const icons = ['🌙', '⭐', '✨', '🌟', '🌕'];
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement('div');
+    item.className = 'moon-rain';
+    item.textContent = icons[Math.floor(Math.random() * icons.length)];
+    item.style.left = Math.random() * 100 + '%';
+    item.style.animationDuration = (3 + Math.random() * 3) + 's';
+    item.style.animationDelay = (Math.random() * 2) + 's';
+    container.appendChild(item);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 8000);
+}
+
+// ============================================================
+//  UTILITIES
+// ============================================================
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+function waitForTap() {
+  return new Promise((resolve) => {
+    const handler = (e) => {
+      // Skip if typing — let skip happen instead
+      if (isTyping) return;
+      document.removeEventListener('click', handler);
+      document.removeEventListener('touchstart', handler);
+      resolve();
+    };
+    document.addEventListener('click', handler);
+    document.addEventListener('touchstart', handler);
+  });
+}
+
+// ============================================================
+//  TAP HANDLER (skip typewriter or advance)
+// ============================================================
+document.addEventListener('click', (e) => {
+  // Don't skip if clicking buttons
+  if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+  if (e.target.tagName === 'VIDEO') return;
+
+  if (isTyping) {
+    skipTypewriter();
+  }
+});
+
+document.addEventListener('touchstart', (e) => {
+  if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+  if (e.target.tagName === 'VIDEO') return;
+
+  if (isTyping) {
+    skipTypewriter();
+  }
+}, { passive: true });
+
+// ============================================================
+//  KEYBOARD EASTER EGGS
+// ============================================================
+document.addEventListener('keydown', (e) => {
+  secretBuffer += e.key.toUpperCase();
+  if (secretBuffer.length > 10) secretBuffer = secretBuffer.slice(-10);
+
+  // LUNNA → moon & star rain
+  if (secretBuffer.includes('LUNNA')) {
+    secretBuffer = '';
+    launchMoonRain(50);
+  }
+});
+
+// Touch on "cereza" word → cherry rain
+document.addEventListener('click', (e) => {
+  if (e.target.classList && e.target.classList.contains('cafe-word')) {
+    const word = e.target.textContent.toLowerCase();
+    if (word.includes('cereza')) {
+      launchCherries(25);
+    }
+  }
+});
+
+// ============================================================
+//  11:11 EASTER EGG
+// ============================================================
+function check1111() {
+  const now = new Date();
+  if (now.getHours() === 11 && now.getMinutes() === 11) {
+    if (!document.querySelector('.special-star')) {
+      const star = document.createElement('div');
+      star.className = 'special-star';
+      star.textContent = '11:11';
+      star.style.top = (10 + Math.random() * 20) + '%';
+      star.style.left = (10 + Math.random() * 30) + '%';
+      document.body.appendChild(star);
+    }
+  }
+}
+
+// ============================================================
+//  GAME START
+// ============================================================
+async function startGame() {
+  if (gameStarted) return;
+  gameStarted = true;
+
+  // Start with prologue (showVerse handles the screen transition)
+  showVerse(0);
+}
+
+// ============================================================
+//  INITIALIZATION
+// ============================================================
+function init() {
+  initStarCanvas();
+  drawStars();
+
+  // Check 11:11 every 30s
+  setInterval(check1111, 30000);
+  check1111();
+
+  // Resize handler
+  window.addEventListener('resize', () => {
+    initStarCanvas();
+    if (constCanvas.classList.contains('visible')) {
+      initConstellation();
+    }
+  });
+
+  // Hide loading screen, show title
+  setTimeout(() => {
+    document.getElementById('loading-screen').classList.add('fade-out');
+    setTimeout(() => {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('title-screen').classList.add('active');
+      activeScreen = document.getElementById('title-screen');
+    }, 800);
+  }, 1500);
+}
+
+// Wait for fonts
+document.fonts.ready.then(init);
+</script>
+</body>
+</html>
