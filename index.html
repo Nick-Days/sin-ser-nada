@@ -869,6 +869,7 @@
     <h1>Sin Ser Nada</h1>
     <p class="subtitle">Un poema para Lunna</p>
     <button class="btn" onclick="startGame()" style="margin-top: 24px;">Comenzar</button>
+    <p style="font-family:'Lora',serif; font-style:italic; font-size:0.75rem; color:rgba(160,130,109,0.6); margin-top:16px;">toca para avanzar</p>
   </div>
 
   <!-- ===== VERSE SCREENS (dynamic) ===== -->
@@ -1749,9 +1750,13 @@ async function showVerse(verseIndex) {
     await showVideoOverlay();
   }
 
-  // Collect memory
+  // Collect memory — wait for tap before showing popup
   if (verse.memory !== null) {
-    await sleep(300);
+    awaitingTap = true;
+    tapEl.classList.add('visible');
+    await waitForTap();
+    tapEl.classList.remove('visible');
+    awaitingTap = false;
     await collectMemory(verse.memory);
   }
 
@@ -2323,13 +2328,14 @@ function checkConstHover(px, py) {
   }
 }
 
-constCanvas.style.pointerEvents = 'auto';
-constCanvas.addEventListener('mousemove', (e) => {
+// Listen on closing-screen (z-index 10, above constellation canvas z-index 8)
+const closingScreenEl = document.getElementById('closing-screen');
+closingScreenEl.addEventListener('mousemove', (e) => {
   checkConstHover(e.clientX, e.clientY);
-  constCanvas.style.cursor = hoveredStar ? 'pointer' : 'default';
+  closingScreenEl.style.cursor = hoveredStar ? 'pointer' : 'default';
 });
-constCanvas.addEventListener('mouseleave', () => { hoveredStar = null; });
-constCanvas.addEventListener('touchstart', (e) => {
+closingScreenEl.addEventListener('mouseleave', () => { hoveredStar = null; });
+closingScreenEl.addEventListener('touchstart', (e) => {
   const t = e.touches[0];
   checkConstHover(t.clientX, t.clientY);
   // Auto-hide after 2s on mobile
