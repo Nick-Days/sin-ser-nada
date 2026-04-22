@@ -2164,9 +2164,14 @@ function selectDay(cell, day, month, isSpecial) {
   // Show role message, then closing screen
   setTimeout(() => {
     resp.textContent = 'Nicolás no sabe tu respuesta, tu eres la elegida para ser quien notifique, tu rol es primordial.';
+    resp.style.fontSize = '1.15rem';
+    resp.style.fontStyle = 'normal';
+    resp.style.color = '#f5edd6';
+    resp.style.maxWidth = '320px';
+    resp.style.lineHeight = '1.6';
     setTimeout(() => {
       showClosingScreen();
-    }, 3500);
+    }, 4500);
   }, 2000);
 }
 
