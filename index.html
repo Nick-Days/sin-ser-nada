@@ -2087,8 +2087,7 @@ async function answerNo() {
 //  CALENDAR
 // ============================================================
 const SPECIAL_DAYS = [
-  { month: 4, day: 2 },  // 2 de mayo (month 4 = May in 0-indexed)
-  { month: 4, day: 7 },  // 7 de mayo
+  { month: 3, day: 25 },  // 25 de abril (sábado)
 ];
 
 function buildCalendar() {
@@ -2097,10 +2096,10 @@ function buildCalendar() {
   const today = new Date();
   const todayDate = today.getDate();
 
-  // April 2025: from today (22+) to 30
-  buildMonth(wrapper, 2025, 3, 'Abril', todayDate);
-  // May 2025: 1-15
-  buildMonth(wrapper, 2025, 4, 'Mayo', 0, 15);
+  // April 2026: from today (22+) to 30
+  buildMonth(wrapper, 2026, 3, 'Abril', todayDate);
+  // May 2026: 1-15
+  buildMonth(wrapper, 2026, 4, 'Mayo', 0, 15);
 }
 
 function buildMonth(wrapper, year, month, label, startFrom, maxDay) {
