@@ -2087,7 +2087,11 @@ async function answerNo() {
 //  CALENDAR
 // ============================================================
 const SPECIAL_DAYS = [
-  { month: 3, day: 25 },  // 25 de abril (sábado)
+  { month: 4, day: 2 },  // 2 de mayo
+  { month: 4, day: 7 },  // 7 de mayo
+];
+const UNAVAILABLE_DAYS = [
+  { month: 3, day: 25 },  // 25 de abril
 ];
 
 function buildCalendar() {
@@ -2145,9 +2149,10 @@ function buildMonth(wrapper, year, month, label, startFrom, maxDay) {
     cell.textContent = d;
 
     const isPast = startFrom && d < startFrom;
+    const isUnavailable = UNAVAILABLE_DAYS.some(s => s.month === month && s.day === d);
     const isSpecial = SPECIAL_DAYS.some(s => s.month === month && s.day === d);
 
-    if (isPast) {
+    if (isPast || isUnavailable) {
       cell.classList.add('past');
     } else {
       if (isSpecial) cell.classList.add('special');
