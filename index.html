@@ -1680,8 +1680,9 @@ function skipTypewriter() {
 
 function highlightCafeWords(text) {
   let result = escapeHtml(text);
-  for (const word of CAFE_WORDS) {
-    const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
+  const sorted = [...CAFE_WORDS].sort((a, b) => b.length - a.length);
+  for (const word of sorted) {
+    const regex = new RegExp(`(?<![a-záéíóúñü])(${escapeRegex(word)})(?![a-záéíóúñü])`, 'gi');
     result = result.replace(regex, '<span class="cafe-word">$1</span>');
   }
   return result;
@@ -2023,7 +2024,9 @@ async function showFinalProposal() {
     'Solo sé que me la paso bien contigo',
     'y quiero seguir descubriéndote.',
     '',
-    'Entonces... ¿una cita más?',
+    'Entonces...',
+    '',
+    '¿una cita más?',
   ];
 
   for (const line of lines) {
